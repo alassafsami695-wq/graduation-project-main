@@ -1,0 +1,11 @@
+"use server";
+import { apiFetch } from "@/lib/api";
+import { revalidatePath } from "next/cache";
+
+export async function updateAd(id: number | string, data: FormData): Promise<any> {
+    const response = await apiFetch(`/admin/ads/${id}`, {
+        method: "POST", // Using POST for FormData updates
+        body: data,
+    });
+    return response;
+}

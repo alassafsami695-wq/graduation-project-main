@@ -1,0 +1,167 @@
+@import "tailwindcss";
+
+/* 
+  ============================================
+  EDU Masar - Global Styles (Tailwind CSS v4)
+  Modern Tech-Themed Color Palette
+  ============================================ 
+*/
+
+:root {
+    /* Light Mode Palette - Modern & Clean */
+    --background: oklch(99% 0.005 260);
+    --background-secondary: oklch(97% 0.01 260);
+    --foreground: oklch(20% 0.02 260);
+    --foreground-muted: oklch(50% 0.03 260);
+
+    /* Tech Indigo - Primary */
+    --primary: oklch(55% 0.22 270);
+    --primary-hover: oklch(50% 0.22 270);
+    --primary-foreground: oklch(100% 0 0);
+
+    /* Modern Cyan - Secondary */
+    --secondary: oklch(65% 0.18 200);
+    --secondary-hover: oklch(60% 0.18 200);
+    --secondary-foreground: oklch(100% 0 0);
+
+    /* Accents */
+    --border: oklch(90% 0.02 260);
+    --ring: oklch(55% 0.22 270 / 0.5);
+}
+
+.dark {
+    /* Dark Mode Palette - Deep Space */
+    --background: oklch(14% 0.02 270);
+    --background-secondary: oklch(18% 0.03 270);
+    --foreground: oklch(95% 0.01 260);
+    --foreground-muted: oklch(70% 0.02 260);
+
+    /* Tech Indigo - Primary (Slightly more vibrant for dark mode) */
+    --primary: oklch(65% 0.18 275);
+    --primary-hover: oklch(70% 0.18 275);
+    --primary-foreground: oklch(10% 0.03 270);
+
+    /* Modern Cyan - Secondary (Slightly more vibrant for dark mode) */
+    --secondary: oklch(75% 0.14 200);
+    --secondary-hover: oklch(80% 0.14 200);
+    --secondary-foreground: oklch(10% 0.03 200);
+
+    /* Accents */
+    --border: oklch(25% 0.04 270);
+    --ring: oklch(65% 0.18 275 / 0.5);
+}
+
+@theme {
+    --color-bg-primary: var(--background);
+    --color-bg-secondary: var(--background-secondary);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary-hover: var(--primary-hover);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary-hover: var(--secondary-hover);
+    --color-foreground: var(--foreground);
+    --color-foreground-muted: var(--foreground-muted);
+    --color-border: var(--border);
+
+    /* Typography */
+    --font-sans: var(--font-almarai), ui-sans-serif, system-ui, sans-serif;
+
+    /* Animations */
+    --animate-blob: blob 7s infinite;
+
+    /* Shadows */
+    --shadow-primary: 0 10px 15px -3px oklch(55% 0.22 270 / 0.2), 0 4px 6px -4px oklch(55% 0.22 270 / 0.2);
+    --shadow-secondary: 0 10px 15px -3px oklch(65% 0.18 200 / 0.2), 0 4px 6px -4px oklch(65% 0.18 200 / 0.2);
+}
+
+@keyframes blob {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    33% {
+        transform: translate(30px, -50px) scale(1.1);
+    }
+
+    66% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+}
+
+/* Base resets and defaults */
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-bg-primary text-foreground antialiased transition-colors duration-300;
+        font-family: var(--font-sans);
+    }
+
+    /* Modern Smooth Scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        @apply bg-bg-primary;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-border rounded-full border-2 border-solid border-bg-primary hover:bg-foreground-muted transition-colors;
+    }
+}
+
+/* Custom Components and Utilities */
+@layer components {
+
+    /* Modern Glassmorphism Helper */
+    .glass {
+        @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-slate-700/30;
+    }
+
+    /* Primary Button Utility */
+    .btn-primary {
+        @apply flex items-center justify-center px-6 py-2.5 rounded-xl font-medium bg-primary hover:bg-primary-hover shadow-primary hover:scale-[1.02] active:scale-[0.98] transition-all duration-200;
+        color: var(--primary-foreground);
+    }
+
+    /* Secondary Button Utility */
+    .btn-secondary {
+        @apply flex items-center justify-center px-6 py-2.5 rounded-xl font-medium bg-secondary hover:bg-secondary-hover shadow-secondary hover:scale-[1.02] active:scale-[0.98] transition-all duration-200;
+        color: var(--secondary-foreground);
+    }
+
+    /* Outline Button Utility */
+    .btn-outline {
+        @apply flex items-center justify-center px-6 py-2.5 rounded-xl font-medium border-2 border-primary text-primary hover:bg-primary/5 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200;
+    }
+
+    /* Card Component */
+    .card-modern {
+        @apply bg-bg-secondary border border-border rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300;
+    }
+
+    /* Input Field */
+    .input-modern {
+        @apply w-full px-4 py-2.5 bg-bg-primary border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-foreground-muted transition-all duration-200;
+    }
+}
+
+@layer utilities {
+    .text-gradient {
+        @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+    }
+
+    .glow {
+        @apply shadow-[0_0_20px_-5px_var(--primary)];
+    }
+}
