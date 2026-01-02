@@ -1,14 +1,21 @@
-"use client";
+import { getTeacherComments } from "@/actions/teacher/get-comments";
+import TeacherCommentsClient from "@/components/lists/teacher/TeacherCommentsClient";
 
-import React from "react";
+export default async function TeacherCommentsPage() {
+    const commentsResponse = await getTeacherComments();
+    const comments = commentsResponse?.data || commentsResponse || [];
 
-export default function TeacherCommentsPage() {
     return (
         <div className="p-8 space-y-8">
-            <h2 className="text-3xl font-black">تعليقات الطلاب</h2>
-            <div className="bg-bg-secondary border border-border rounded-3xl p-12 text-center space-y-4">
-                <p className="text-foreground-muted">هذه الصفحة قيد التطوير...</p>
+            <div className="space-y-4">
+                <h2 className="text-3xl font-black italic">
+                    قائمة <span className="text-secondary">التعليقات</span>
+                </h2>
+                <p className="text-foreground-muted font-medium">
+                    هنا يمكنك متابعة والرد على تعليقات الطلاب في دوراتك.
+                </p>
             </div>
+            <TeacherCommentsClient data={comments} />
         </div>
     );
 }

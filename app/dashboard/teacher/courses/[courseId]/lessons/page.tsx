@@ -1,5 +1,5 @@
 import { getTeacherCoursesLessons } from "@/actions/teacher/get-course-lessons";
-import TeacherCourseLessonsClient from "@/components/dashboard/teacher/TeacherCourseLessonsClient";
+import TeacherCourseLessonsClient from "@/components/lists/teacher/TeacherCourseLessonsClient";
 import { Suspense } from "react";
 
 interface TeacherCourseLessonsPageProps {

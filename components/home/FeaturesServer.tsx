@@ -1,4 +1,4 @@
-import { getFeatures } from "@/actions/get-features";
+import { getFeatures } from "@/actions/public/get-features";
 import FeaturesClient from "./FeaturesClient";
 
 const FeaturesServer = async () => {

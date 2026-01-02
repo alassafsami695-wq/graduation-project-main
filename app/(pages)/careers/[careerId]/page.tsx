@@ -1,4 +1,4 @@
-import { getCareerDetail } from "@/actions/careers/get-career-detail";
+import { getCareerDetail } from "@/actions/public/careers/get-career-detail";
 import { Briefcase, CircleDollarSign, Clock, ArrowRight, CheckCircle2, MapPin, Calendar, Share2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";

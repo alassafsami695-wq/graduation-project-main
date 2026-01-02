@@ -1,5 +1,5 @@
-import FeatureManager from "@/components/dashboard/admin/features/FeatureManager";
-import { getFeatures } from "@/actions/get-features";
+import FeatureManager from "@/components/lists/admin/features/FeatureManager";
+import { getFeatures } from "@/actions/public/get-features";
 
 export default async function AdminFeaturesPage() {
     const features = await getFeatures();

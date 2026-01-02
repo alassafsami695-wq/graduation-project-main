@@ -1,5 +1,5 @@
-import { getStats } from "@/actions/get-stats";
-import TeacherDashboardClient from "@/components/dashboard/teacher/TeacherDashboardClient";
+import { getStats } from "@/actions/public/get-stats";
+import TeacherDashboardClient from "@/components/lists/teacher/TeacherDashboardClient";
 
 export default async function TeacherDashboardPage() {
     const stats = await getStats();

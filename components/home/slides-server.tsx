@@ -1,5 +1,5 @@
 import SlidesClient from "./slides-client";
-import { getAds } from "@/actions/slides/get-slides";
+import { getAds } from "@/actions/public/slides/get-slides";
 
 const SlidesServer = async () => {
     const slides = await getAds();

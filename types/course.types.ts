@@ -35,3 +35,13 @@ export interface Course {
     created_at: string;
     updated_at: string;
 }
+
+export interface CourseWithExams extends Course {
+    questions: any[]; // Or Question from lesson.types
+}
+
+export interface TeacherCourse extends Course {
+    category?: any;
+    students_count?: number;
+    lessons_count?: number;
+}

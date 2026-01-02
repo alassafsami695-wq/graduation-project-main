@@ -1,11 +1,11 @@
-import { getBestSellingCourses } from '@/actions/courses/best-selling-courses';
-import { CourseCard } from '@/components/ui/CourseCard';
+import { CourseCard } from '@/components/cards/CourseCard';
 import { Course } from '@/types/course.types';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { bestSellingCourses } from '@/actions/public/courses/best-selling-courses';
 
 export default async function BestSellingCourses() {
-    const courses: Course[] = await getBestSellingCourses();
+    const courses: Course[] = await bestSellingCourses();
 
     if (courses.length === 0) return null;
 

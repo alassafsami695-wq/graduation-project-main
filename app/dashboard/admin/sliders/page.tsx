@@ -1,6 +1,6 @@
 import React from "react";
-import SliderManager from "@/components/dashboard/admin/sliders/SliderManager";
-import { getAds } from "@/actions/slides/get-slides";
+import SliderManager from "@/components/lists/admin/sliders/SliderManager";
+import { getAds } from "@/actions/public/slides/get-slides";
 
 export default async function AdminSlidersPage() {
     const ads = await getAds();

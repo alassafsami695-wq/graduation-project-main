@@ -1,5 +1,5 @@
-import { getWishlists } from "@/actions/wishlist/get-wishlist";
-import WishlistClient from "@/components/wishlist/WishlistClient";
+import { getWishlists } from "@/actions/student/wishlist/get-wishlist";
+import WishlistClient from "@/components/lists/wishlist/WishlistClient";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

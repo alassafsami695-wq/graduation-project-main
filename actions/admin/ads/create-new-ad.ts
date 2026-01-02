@@ -1,9 +1,9 @@
 "use server";
 import { apiFetch } from "@/lib/api";
-import { revalidatePath } from "next/cache";
+import { ActionResponse } from "@/types";
 
-export async function createNewAd(data: FormData): Promise<any> {
-    const response = await apiFetch("/admin/ads", {
+export async function createNewAd(data: FormData): Promise<ActionResponse> {
+    const response = await apiFetch<ActionResponse>("/admin/ads", {
         method: "POST",
         body: data,
     });

@@ -15,7 +15,7 @@ import {
     Tv
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth";
-import { logoutAction } from "@/actions/auth";
+import { logoutAction } from "@/actions/public/auth";
 import { useRouter } from "next/navigation";
 
 export default function UserDropdown() {

@@ -1,8 +1,9 @@
 "use server";
 import { apiFetch } from "@/lib/api";
+import { ActionResponse, Profile } from "@/types";
 
-export async function updateProfile(data: any): Promise<any> {
-    return apiFetch("/profile/update", {
+export async function updateProfile(data: any): Promise<ActionResponse<Profile>> {
+    return apiFetch<ActionResponse<Profile>>("/profile/update", {
         method: "POST",
         body: data,
     });

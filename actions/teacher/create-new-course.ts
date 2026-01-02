@@ -7,7 +7,6 @@ export async function createNewCourse(data: any): Promise<any> {
         method: "POST",
         body: data,
     });
-
     revalidatePath("/dashboard/teacher/courses");
     return response;
 }

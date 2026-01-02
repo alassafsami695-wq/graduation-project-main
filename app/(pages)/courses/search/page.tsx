@@ -1,5 +1,5 @@
-import { searchCourses } from "@/actions/courses/search-courses";
-import { CourseCard } from "@/components/ui/CourseCard";
+import { searchCourses } from "@/actions/public/courses/search-courses";
+import { CourseCard } from "@/components/cards/CourseCard";
 import { Course } from "@/types/course.types";
 
 interface SearchPageProps {

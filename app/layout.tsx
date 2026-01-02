@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Almarai } from "next/font/google";
 import "./globals.css";
-import { Footer, Navbar } from "@/components/common";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
 
-import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "sonner";
 
 const almarai = Almarai({

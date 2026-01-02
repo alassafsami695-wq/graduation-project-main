@@ -1,6 +1,6 @@
 import React from "react";
-import CareerManager from "@/components/dashboard/admin/careers/CareerManager";
-import { getCareers } from "@/actions/careers/get-careers";
+import CareerManager from "@/components/lists/admin/careers/CareerManager";
+import { getCareers } from "@/actions/public/careers/get-careers";
 
 export default async function AdminCareersPage() {
     const careers = await getCareers();

@@ -1,5 +1,5 @@
-import { getCategoryCourses } from "@/actions/categories/get-category-courses";
-import { CourseCard } from "@/components/ui/CourseCard";
+import { getCategoryCourses } from "@/actions/public/categories/get-category-courses";
+import { CourseCard } from "@/components/cards/CourseCard";
 import { Course } from "@/types/course.types";
 import { BookOpen, GraduationCap, LayoutGrid, Search } from "lucide-react";
 import { notFound } from "next/navigation";

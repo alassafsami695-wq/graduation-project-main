@@ -1,5 +1,5 @@
 import { getStudents } from "@/actions/admin/users/get-students";
-import UserManager from "@/components/dashboard/admin/users/UserManager";
+import UserManager from "@/components/lists/admin/users/UserManager";
 
 export default async function Page() {
     const studentsResponse = await getStudents();

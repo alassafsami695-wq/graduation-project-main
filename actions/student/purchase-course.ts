@@ -1,8 +1,9 @@
-"use server"
+"use server";
 import { apiFetch } from "@/lib/api";
+import { ActionResponse } from "@/types";
 
-export async function purchaseCourse(userWallet: any, courseId: number) {
-    const response = await apiFetch(`/courses/${courseId}/purchase`, {
+export async function purchaseCourse(userWallet: any, courseId: number): Promise<ActionResponse> {
+    const response = await apiFetch<ActionResponse>(`/courses/${courseId}/purchase`, {
         method: "POST",
         body: userWallet
     });

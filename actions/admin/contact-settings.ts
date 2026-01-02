@@ -1,10 +1,10 @@
 "use server";
-
 import { apiFetch } from "@/lib/api";
 import { revalidatePath } from "next/cache";
+import { ActionResponse } from "@/types";
 
-export async function storeContact(data: any) {
-    const response = await apiFetch("/admin/contact-settings", {
+export async function storeContact(data: any): Promise<ActionResponse> {
+    const response = await apiFetch<ActionResponse>("/admin/contact-settings", {
         method: "POST",
         body: data,
     });
@@ -13,8 +13,8 @@ export async function storeContact(data: any) {
     return response;
 }
 
-export async function updateContact(id: number, data: any) {
-    const response = await apiFetch(`/admin/contact-settings/${id}/update`, {
+export async function updateContact(id: number, data: any): Promise<ActionResponse> {
+    const response = await apiFetch<ActionResponse>(`/admin/contact-settings/${id}/update`, {
         method: "POST",
         body: data,
     });
@@ -23,8 +23,8 @@ export async function updateContact(id: number, data: any) {
     return response;
 }
 
-export async function deleteContact(id: number) {
-    const response = await apiFetch(`/admin/contact-settings/${id}`, {
+export async function deleteContact(id: number): Promise<ActionResponse> {
+    const response = await apiFetch<ActionResponse>(`/admin/contact-settings/${id}`, {
         method: "DELETE",
     });
     revalidatePath("/");

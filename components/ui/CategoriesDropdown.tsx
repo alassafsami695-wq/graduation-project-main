@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, LayoutGrid } from "lucide-react";
-import { getCategories } from "@/actions/categories/get-categories";
+import { getCategories } from "@/actions/public/categories/get-categories";
 import { Category } from "@/types/category.types";
 
 export default function CategoriesDropdown() {

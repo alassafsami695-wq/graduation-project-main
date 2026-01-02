@@ -1,5 +1,5 @@
 import { getTeacherCourses } from "@/actions/teacher/get-courses";
-import TeacherCoursesClient from "@/components/dashboard/teacher/TeacherCoursesClient";
+import TeacherCoursesClient from "@/components/lists/teacher/TeacherCoursesClient";
 import { Suspense } from "react";
 // import Loading from "@/components/ui/Loading";
 

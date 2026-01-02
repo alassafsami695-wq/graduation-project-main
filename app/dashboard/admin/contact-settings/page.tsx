@@ -1,7 +1,5 @@
-import React from "react";
-import Header from "@/components/dashboard/Header";
-import ContactManager from "@/components/dashboard/admin/contact-settings/ContactManager";
-import { getContacts } from "@/actions/contact/get-contacts";
+import ContactManager from "@/components/lists/admin/contact-settings/ContactManager";
+import { getContacts } from "@/actions/public/contact/get-contacts";
 
 export default async function AdminContactSettingsPage() {
     const contacts = await getContacts();

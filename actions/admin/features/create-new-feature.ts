@@ -1,14 +1,13 @@
 "use server";
 import { apiFetch } from "@/lib/api";
+import { ActionResponse } from "@/types";
 
 import { revalidatePath } from "next/cache";
 
-export async function createNewFeature(featureData: any): Promise<any> {
-    const response = await apiFetch("/admin/features", {
+export async function createNewFeature(featureData: any): Promise<ActionResponse> {
+    const response = await apiFetch<ActionResponse>("/admin/features", {
         method: "POST",
         body: featureData,
     });
-    // revalidatePath("/dashboard/admin/features");
-    // revalidatePath("/");
     return response;
 }

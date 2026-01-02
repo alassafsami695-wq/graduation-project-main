@@ -1,6 +1,6 @@
 import React from "react";
-import CategoryManager from "@/components/dashboard/admin/categories/CategoryManager";
-import { getCategories } from "@/actions/categories/get-categories";
+import CategoryManager from "@/components/lists/admin/categories/CategoryManager";
+import { getCategories } from "@/actions/public/categories/get-categories";
 
 export default async function AdminCategoriesPage() {
     const categories = await getCategories();

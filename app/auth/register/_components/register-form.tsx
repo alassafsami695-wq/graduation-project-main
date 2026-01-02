@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { RegisterSchema, RegisterInput } from "@/lib/validations/auth.schema";
-import { registerAction } from "@/actions/auth";
+import { registerAction } from "@/actions/public/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Link from "next/link";

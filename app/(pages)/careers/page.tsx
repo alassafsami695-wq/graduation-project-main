@@ -1,5 +1,5 @@
-import { getCareers } from "@/actions/careers/get-careers";
-import { CareerCard } from "@/components/careers/CareerCard";
+import { getCareers } from "@/actions/public/careers/get-careers";
+import { CareerCard } from "@/components/cards/CareerCard";
 import { Career } from "@/types/career.types";
 
 export default async function CareersPage() {
