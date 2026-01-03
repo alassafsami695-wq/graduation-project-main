@@ -105,7 +105,8 @@ const Navbar: React.FC = () => {
           <form
             role="search"
             className="w-full"
-            onSubmit={(e) => handleSearch(e.target.search.value)}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onSubmit={(e: any) => handleSearch(e.target.search.value)}
           >
             <label htmlFor="nav-search" className="sr-only">
               ابحث

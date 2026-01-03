@@ -3,6 +3,8 @@ import PurchasedCoursesList from '@/components/lists/courses/PurchasedCoursesLis
 
 export default async function page() {
 
-    const studentCourses = await getStudentCourses();
-    return <PurchasedCoursesList purchasedCourses={studentCourses.courses} />
+    const wishlistData: any[] = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const studentCourses: any = await getStudentCourses();
+    return <PurchasedCoursesList purchasedCourses={studentCourses?.courses || studentCourses || []} />
 }

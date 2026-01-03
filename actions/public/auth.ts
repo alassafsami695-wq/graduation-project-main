@@ -56,15 +56,40 @@ export async function loginAction(values: LoginInput): Promise<ActionResponse> {
     }
 }
 
-export async function registerAction(values: RegisterInput): Promise<ActionResponse> {
+export async function registerStudentAction(values: RegisterInput): Promise<ActionResponse> {
     try {
-        await apiFetch("/register", {
+        await apiFetch("/register/student", {
             method: "POST",
             body: {
                 name: values.name,
                 email: values.email,
                 password: values.password,
                 password_confirmation: values.password_confirmation,
+                wallet_password: values.wallet_password,
+            },
+        });
+
+        const cookieStore = await cookies();
+        cookieStore.set("email", values.email, {
+            path: "/",
+        });
+
+        return { success: true, redirectTo: "/verification" };
+    } catch (error: any) {
+        return { success: false, error: error.message || "حدث خطأ أثناء التسجيل" };
+    }
+}
+
+export async function registerTeacherAction(values: RegisterInput): Promise<ActionResponse> {
+    try {
+        await apiFetch("/register/teacher", {
+            method: "POST",
+            body: {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+                password_confirmation: values.password_confirmation,
+                wallet_password: values.wallet_password,
             },
         });
 

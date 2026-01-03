@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
 import { RegisterSchema, RegisterInput } from "@/lib/validations/auth.schema";
-import { registerAction } from "@/actions/public/auth";
+import { registerStudentAction, registerTeacherAction } from "@/actions/public/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import Link from "next/link";
@@ -16,6 +16,7 @@ export default function RegisterForm() {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [role, setRole] = useState<"student" | "teacher">("student");
 
     const {
         register,
@@ -28,7 +29,9 @@ export default function RegisterForm() {
     const onSubmit = (values: RegisterInput) => {
         setError(null);
         startTransition(async () => {
-            const result = await registerAction(values);
+            const action = role === "student" ? registerStudentAction : registerTeacherAction;
+            const result = await action(values);
+
             if (result.error) {
                 setError(result.error);
             } else if (result.success && result.redirectTo) {
@@ -61,6 +64,31 @@ export default function RegisterForm() {
                             <p>{error}</p>
                         </motion.div>
                     )}
+
+                    <div className="flex gap-4 p-1 bg-bg-primary/50 rounded-xl border border-border">
+                        <button
+                            type="button"
+                            onClick={() => setRole("student")}
+                            className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-medium transition-all ${role === "student"
+                                ? "bg-primary text-white shadow-md"
+                                : "text-foreground-muted hover:text-foreground"
+                                }`}
+                        >
+                            <User className="w-4 h-4" />
+                            طالب
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setRole("teacher")}
+                            className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-medium transition-all ${role === "teacher"
+                                ? "bg-primary text-white shadow-md"
+                                : "text-foreground-muted hover:text-foreground"
+                                }`}
+                        >
+                            <User className="w-4 h-4" />
+                            معلم
+                        </button>
+                    </div>
 
                     <div className="space-y-4">
                         <div className="space-y-1">
@@ -129,6 +157,23 @@ export default function RegisterForm() {
                                 <p className="text-xs text-red-500 mr-1 mt-1">{errors.password_confirmation.message}</p>
                             )}
                         </div>
+
+                        <div className="space-y-1">
+                            <label className="text-sm font-medium mr-1">كلمة مرور المحفظة</label>
+                            <div className="relative">
+                                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+                                <Input
+                                    {...register("wallet_password")}
+                                    type="password"
+                                    placeholder="••••"
+                                    className="pr-11 bg-bg-primary/50 border-border focus:ring-primary focus:border-primary rounded-xl transition-all"
+                                    disabled={isPending}
+                                />
+                            </div>
+                            {errors.wallet_password && (
+                                <p className="text-xs text-red-500 mr-1 mt-1">{errors.wallet_password.message}</p>
+                            )}
+                        </div>
                     </div>
 
                     <Button
@@ -140,7 +185,7 @@ export default function RegisterForm() {
                             <Loader2 className="w-5 h-5 animate-spin" />
                         ) : (
                             <span className="flex items-center gap-2">
-                                إنشاء حساب
+                                إنشاء حساب {role === "student" ? "طالب" : "معلم"}
                             </span>
                         )}
                     </Button>

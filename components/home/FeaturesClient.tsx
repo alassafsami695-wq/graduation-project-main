@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Zap, BookOpen, Users, Trophy, Sparkles, Orbit, Cpu, Rocket } from "lucide-react";
+import { getFullUrl } from "@/lib/utils";
 
 interface Feature {
     id: number;
@@ -51,7 +52,7 @@ const FeaturesClient = ({ features }: FeaturesClientProps) => {
                             {/* Background Image with Hover Effect */}
                             <div
                                 className="absolute inset-0 bg-cover bg-center grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700 opacity-10 group-hover:opacity-30"
-                                style={{ backgroundImage: `url(${feature.image?.replace("http://localhost:8000/storage/", "")}` }}
+                                style={{ backgroundImage: `url(${getFullUrl(feature.image) || fallbackImage}` }}
                             />
 
                             {/* Overlay Gradient */}

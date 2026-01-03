@@ -4,9 +4,12 @@ import { Trash2, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { purchaseCourses } from "@/actions/student/purchase-courses";
+import { toast } from "sonner";
+import { getFullUrl } from "@/lib/utils";
 
 export default function CartPage() {
-    const { items, removeItem, total } = useCartStore();
+    const { items, removeItem, clearCart, total } = useCartStore();
 
     if (items.length === 0) {
         return (
@@ -22,6 +25,30 @@ export default function CartPage() {
             </div>
         );
     }
+
+    const handleCheckout = async () => {
+        try {
+            // Extract course IDs from cart items
+            const courseIds = items.map(item => item.id);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await purchaseCourses(items.map(item => item.id));
+
+            if (response.error) {
+                toast.error(response.error);
+                return;
+            }
+
+            // Success
+            toast.success("تم شراء الدورات بنجاح!");
+            clearCart();
+            // Optional: redirect to my courses page
+            // router.push('/dashboard/student/courses');
+
+        } catch (error) {
+            toast.error("حدث خطأ أثناء عملية الشراء");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-bg-primary py-12 px-4 md:px-8">
@@ -39,7 +66,7 @@ export default function CartPage() {
                                 <div className="relative w-1/3 sm:w-40 h-32 sm:h-28 flex-shrink-0 bg-muted rounded-xl overflow-hidden">
                                     {item.photo ? (
                                         <Image
-                                            src={item.photo}
+                                            src={getFullUrl(item.photo)}
                                             alt={item.title}
                                             fill
                                             className="object-cover"
@@ -99,7 +126,9 @@ export default function CartPage() {
                                 </div>
                             </div>
 
-                            <Button className="w-full text-base py-6 rounded-xl mb-3 shadow-lg shadow-primary/20">
+                            <Button
+                                onClick={handleCheckout}
+                                className="w-full text-base py-6 rounded-xl mb-3 shadow-lg shadow-primary/20">
                                 إتمام الشراء
                             </Button>
 

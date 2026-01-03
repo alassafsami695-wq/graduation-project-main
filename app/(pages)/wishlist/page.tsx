@@ -11,7 +11,8 @@ export default async function WishlistPage() {
         redirect("/auth/login");
     }
 
-    let wishlistData = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let wishlistData: any[] = [];
     try {
         const res = await getWishlists();
         wishlistData = res || [];

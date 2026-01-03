@@ -13,7 +13,8 @@ export default async function AdminCareersPage() {
                     <p className="text-foreground-muted mt-2">قم بإضافة وتعديل الفرص الوظيفية المتاحة في الأكاديمية.</p>
                 </div>
 
-                <CareerManager initialCareers={careers} />
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                <CareerManager initialCareers={(careers as any)?.data || careers || []} />
             </div>
         </div>
     );

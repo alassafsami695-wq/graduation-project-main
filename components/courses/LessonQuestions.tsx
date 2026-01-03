@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { X, Loader2, CheckCircle, XCircle, HelpCircle, Trophy, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { getLessonQuestions, submitLessonAnswers, Question, SubmitAnswer, QuizResult } from "@/actions/student/questions";
+import { getLessonQuestions, submitLessonAnswers } from "@/actions/student/questions";
+import { Question, SubmitAnswer, QuizResult } from "@/types";
 import { toast } from "sonner";
 
 interface LessonQuestionsProps {
@@ -37,13 +38,15 @@ export default function LessonQuestions({ isOpen, onClose, lessonId, lessonTitle
             const data = await getLessonQuestions(lessonId);
             console.log("data", data);
             // Parse options - backend returns comma-separated string like "opt1, opt2, opt3"
-            const parsedQuestions = data.map((q: any) => ({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const parsedQuestions: Question[] = data.map((q: any) => ({
                 ...q,
                 options: typeof q.options === 'string'
                     ? q.options.split(',').map((opt: string) => opt.trim())
                     : q.options
             }));
             setQuestions(parsedQuestions);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(err.message || "فشل في تحميل الأسئلة");
             toast.error("فشل في تحميل الأسئلة");
@@ -74,6 +77,7 @@ export default function LessonQuestions({ isOpen, onClose, lessonId, lessonTitle
             const quizResult = await submitLessonAnswers(lessonId, submitAnswers);
             setResult(quizResult);
             toast.success(quizResult.status === 'passed' ? "مبروك! لقد اجتزت الاختبار" : "للأسف لم تجتز الاختبار، حاول مرة أخرى");
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             toast.error(err.message || "فشل في إرسال الإجابات");
         } finally {
@@ -218,7 +222,7 @@ export default function LessonQuestions({ isOpen, onClose, lessonId, lessonTitle
                                                 ))
                                             ) : (
                                                 /* MCQ Options */
-                                                question.options?.map((option, optIdx) => (
+                                                question.options?.map((option: string, optIdx: number) => (
                                                     <label
                                                         key={optIdx}
                                                         className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${answers[question.id] === option

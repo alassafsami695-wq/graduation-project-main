@@ -22,6 +22,8 @@ import { useAuthStore } from "@/store/auth";
 import { toast } from "sonner";
 import { updateProfile } from "@/actions/public/profile/update-profile";
 import ChargeWalletModal from "./ChargeWalletModal";
+import UpdateWalletModal from "./UpdateWalletModal";
+import WithdrawWalletModal from "./WithdrawWalletModal";
 
 interface ProfileClientProps {
     initialData: any;
@@ -33,6 +35,8 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isChargeModalOpen, setIsChargeModalOpen] = useState(false);
+    const [isUpdateWalletOpen, setIsUpdateWalletOpen] = useState(false);
+    const [isWithdrawWalletOpen, setIsWithdrawWalletOpen] = useState(false);
 
     // Fallback to initialData if user is not yet populated, though useAuthStore is preferred
     const profile = user || initialData;
@@ -64,10 +68,12 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
             const res = await updateProfile(formData);
 
             if (res?.data) {
+                // @ts-ignore
                 setAuth(res.data, token!); // Update store
                 toast.success("تم تحديث الملف الشخصي بنجاح");
                 setIsEditing(false);
             } else if (res?.id) { // If it returns direct user object
+                // @ts-ignore
                 setAuth(res, token!);
                 toast.success("تم تحديث الملف الشخصي بنجاح");
                 setIsEditing(false);
@@ -102,11 +108,6 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
             y: 0,
             transition: { duration: 0.5, staggerChildren: 0.1 }
         }
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, x: -20 },
-        visible: { opacity: 1, x: 0 }
     };
 
     return (
@@ -322,12 +323,24 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
                                     <h3 className="text-6xl font-black mb-10">{profile.wallet.balance} <span className="text-2xl opacity-60">ريال</span></h3>
                                     <h3 className="text-2xl font-black mb-10">{profile.wallet.account_number} <span className="text-2xl opacity-60"></span></h3>
 
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex flex-wrap items-center gap-4">
                                         <button
                                             onClick={() => setIsChargeModalOpen(true)}
                                             className="px-8 py-3 bg-white text-primary font-black rounded-2xl hover:bg-slate-50 transition-all shadow-lg"
                                         >
                                             شحن الرصيد
+                                        </button>
+                                        <button
+                                            onClick={() => setIsWithdrawWalletOpen(true)}
+                                            className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
+                                        >
+                                            سحب الرصيد
+                                        </button>
+                                        <button
+                                            onClick={() => setIsUpdateWalletOpen(true)}
+                                            className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
+                                        >
+                                            تحديث المحفظة
                                         </button>
                                         <button className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all">سجل المعاملات</button>
                                     </div>
@@ -339,6 +352,8 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
                 </motion.div>
             </div>
             <ChargeWalletModal isOpen={isChargeModalOpen} onClose={() => setIsChargeModalOpen(false)} />
+            <UpdateWalletModal isOpen={isUpdateWalletOpen} onClose={() => setIsUpdateWalletOpen(false)} wallet={profile?.wallet} />
+            <WithdrawWalletModal isOpen={isWithdrawWalletOpen} onClose={() => setIsWithdrawWalletOpen(false)} wallet={profile?.wallet} />
         </div>
     );
 };

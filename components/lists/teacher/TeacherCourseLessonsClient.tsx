@@ -22,15 +22,20 @@ import { Card } from "@/components/cards/Card";
 import { Input } from "@/components/ui/Input";
 import { deleteTeacherCoursesLessons } from "@/actions/teacher/delete-course-lesson";
 import { updateTeacherCoursesLessons } from "@/actions/teacher/update-course-lesson";
+import { createTeacherCourseLesson } from "@/actions/teacher/create-course-lesson";
+import { getFullUrl } from "@/lib/utils";
 
 interface Lesson {
     id: number;
+    course_id: number;
     title: string;
     content: string;
     video_url?: string;
     file_url?: string;
     duration?: string;
     order: number;
+    created_at?: string;
+    updated_at?: string;
 }
 
 interface TeacherCourseLessonsClientProps {
@@ -51,10 +56,29 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
     const [editingLesson, setEditingLesson] = useState<Lesson | null>(null);
     const [videoFile, setVideoFile] = useState<File | null>(null);
 
+    // Add Lesson State
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isAdding, setIsAdding] = useState(false);
+    const [newLesson, setNewLesson] = useState({
+        title: "",
+        content: "",
+        duration: "",
+        file_url: "",
+        order: lessons.length + 1
+    });
+    const [newVideoFile, setNewVideoFile] = useState<File | null>(null);
+
     const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             setVideoFile(file);
+        }
+    };
+
+    const handleNewVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setNewVideoFile(file);
         }
     };
 
@@ -93,7 +117,7 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
             if (editingLesson.file_url) formData.append("file_url", editingLesson.file_url);
 
             if (videoFile) {
-                formData.append("video", videoFile);
+                formData.append("video_url", videoFile);
             }
 
             await updateTeacherCoursesLessons(parseInt(courseId), editingLesson.id, formData);
@@ -109,6 +133,71 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
             toast.error("حدث خطأ أثناء تحديث الدرس");
         } finally {
             setIsUpdating(false);
+        }
+    };
+
+    const handleAddSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            setIsAdding(true);
+
+            const formData = new FormData();
+            formData.append("title", newLesson.title);
+            formData.append("content", newLesson.content);
+            formData.append("order", newLesson.order.toString());
+            if (newLesson.duration) formData.append("duration", newLesson.duration);
+            if (newLesson.file_url) formData.append("file_url", newLesson.file_url);
+
+            if (newVideoFile) {
+                formData.append("video_url", newVideoFile);
+            } else {
+                toast.error("يرجى اختيار ملف فيديو للدرس");
+                setIsAdding(false);
+                return;
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await createTeacherCourseLesson(parseInt(courseId), formData);
+
+            if (response.error) {
+                toast.error(response.error);
+                return;
+            }
+
+            // Assuming successful creation, we might get the new lesson back. 
+            // Ideally we should use the response data. 
+            // For now, if response is the lesson or contains the lesson:
+            const createdLesson = response.data || response;
+
+            // Fallback if response doesn't have ID (though it should)
+            const addedLesson: Lesson = {
+                ...newLesson,
+                id: createdLesson?.id || Date.now(), // Fallback ID
+                video_url: createdLesson?.video_url, // URL from server
+                created_at: new Date().toISOString(), // Mock
+                updated_at: new Date().toISOString(), // Mock
+                course_id: parseInt(courseId)
+            };
+
+            setLessons([...lessons, addedLesson]);
+            toast.success("تم إضافة الدرس بنجاح");
+            setIsAddModalOpen(false);
+
+            // Reset form
+            setNewLesson({
+                title: "",
+                content: "",
+                duration: "",
+                file_url: "",
+                order: lessons.length + 2
+            });
+            setNewVideoFile(null);
+
+        } catch (error) {
+            toast.error("حدث خطأ أثناء إضافة الدرس");
+        } finally {
+            setIsAdding(false);
         }
     };
 
@@ -147,7 +236,9 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
                         لديك {lessons.length} دروس في هذه الدورة
                     </p>
                 </div>
-                <Button className="h-14 px-8 bg-primary text-white font-black rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2">
+                <Button
+                    onClick={() => setIsAddModalOpen(true)}
+                    className="h-14 px-8 bg-primary text-white font-black rounded-2xl hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2">
                     <Plus className="w-6 h-6" />
                     <span>إضافة درس جديد</span>
                 </Button>
@@ -246,7 +337,9 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
                         <p className="text-foreground-muted max-w-sm mb-8">
                             ابدأ بإضافة أول درس لهذه الدورة التدريبية الآن.
                         </p>
-                        <Button className="h-12 px-8 bg-primary text-white font-black rounded-xl hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2">
+                        <Button
+                            onClick={() => setIsAddModalOpen(true)}
+                            className="h-12 px-8 bg-primary text-white font-black rounded-xl hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2">
                             <Plus className="w-5 h-5" />
                             <span>إضافة أول درس</span>
                         </Button>
@@ -326,7 +419,7 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
                                             </Button>
                                             {editingLesson.video_url && !videoFile && (
                                                 <p className="text-[10px] text-foreground-muted px-2 truncate">
-                                                    الحالي: {editingLesson.video_url}
+                                                    الحالي: {getFullUrl(editingLesson.video_url)}
                                                 </p>
                                             )}
                                         </div>
@@ -358,6 +451,7 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
                                 <div className="flex gap-4">
                                     <Button
                                         type="submit"
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                         onClick={handleUpdateSubmit as any}
                                         disabled={isUpdating}
                                         className="flex-1 h-12 bg-primary text-white font-black rounded-xl hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95"
@@ -368,6 +462,128 @@ const TeacherCourseLessonsClient: React.FC<TeacherCourseLessonsClientProps> = ({
                                         type="button"
                                         variant="outline"
                                         onClick={() => setIsEditModalOpen(false)}
+                                        className="h-12 px-8 rounded-xl border-border hover:bg-bg-secondary transition-all"
+                                    >
+                                        إلغاء
+                                    </Button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Add Lesson Modal */}
+            <AnimatePresence>
+                {isAddModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsAddModalOpen(false)}
+                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-2xl bg-bg-primary border border-border rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+                        >
+                            {/* Header */}
+                            <div className="p-6 border-b border-border bg-bg-secondary/30 flex justify-between items-center">
+                                <div>
+                                    <h2 className="text-2xl font-black italic">
+                                        إضافة <span className="text-primary">درس جديد</span>
+                                    </h2>
+                                    <p className="text-foreground-muted mt-1 text-sm">أضف محتوى تعليمي جديد للدورة</p>
+                                </div>
+                            </div>
+
+                            {/* Form */}
+                            <form onSubmit={handleAddSubmit} className="p-6 overflow-y-auto custom-scrollbar flex-1 space-y-5">
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold mr-2">عنوان الدرس <span className="text-red-500">*</span></label>
+                                    <Input
+                                        required
+                                        value={newLesson.title}
+                                        onChange={(e) => setNewLesson({ ...newLesson, title: e.target.value })}
+                                        placeholder="مثال: مقدمة في البرمجة"
+                                        className="bg-bg-secondary/50 border-border rounded-xl h-11"
+                                    />
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold mr-2">محتوى الدرس <span className="text-red-500">*</span></label>
+                                    <textarea
+                                        required
+                                        value={newLesson.content}
+                                        onChange={(e) => setNewLesson({ ...newLesson, content: e.target.value })}
+                                        className="w-full min-h-[120px] p-4 rounded-xl border border-border bg-bg-secondary/50 focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
+                                        placeholder="أدخل محتوى أو وصف الدرس..."
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-bold mr-2">فيديو الدرس <span className="text-red-500">*</span></label>
+                                        <div className="flex flex-col gap-2">
+                                            <input
+                                                type="file"
+                                                accept="video/*"
+                                                onChange={handleNewVideoChange}
+                                                className="hidden"
+                                                id="new-video-upload"
+                                            />
+                                            <Button
+                                                type="button"
+                                                variant="outline"
+                                                onClick={() => document.getElementById('new-video-upload')?.click()}
+                                                className="rounded-xl border-border h-11 w-full flex items-center justify-center gap-2 bg-bg-secondary/30"
+                                            >
+                                                <Video className="w-4 h-4 text-primary" />
+                                                <span>{newVideoFile ? newVideoFile.name : "رفع فيديو"}</span>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <label className="text-sm font-bold mr-2">المدة (مثال: 10:00)</label>
+                                        <Input
+                                            value={newLesson.duration}
+                                            onChange={(e) => setNewLesson({ ...newLesson, duration: e.target.value })}
+                                            placeholder="00:00"
+                                            className="bg-bg-secondary/50 border-border rounded-xl h-11"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1.5">
+                                    <label className="text-sm font-bold mr-2">رابط الملف (اختياري)</label>
+                                    <Input
+                                        value={newLesson.file_url}
+                                        onChange={(e) => setNewLesson({ ...newLesson, file_url: e.target.value })}
+                                        placeholder="https://..."
+                                        className="bg-bg-secondary/50 border-border rounded-xl h-11"
+                                    />
+                                </div>
+                            </form>
+
+                            {/* Footer */}
+                            <div className="border-t border-border p-4 bg-bg-primary/40">
+                                <div className="flex gap-4">
+                                    <Button
+                                        type="submit"
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        onClick={handleAddSubmit as any}
+                                        disabled={isAdding}
+                                        className="flex-1 h-12 bg-primary text-white font-black rounded-xl hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95"
+                                    >
+                                        {isAdding ? "جاري الإضافة..." : "إضافة الدرس"}
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => setIsAddModalOpen(false)}
                                         className="h-12 px-8 rounded-xl border-border hover:bg-bg-secondary transition-all"
                                     >
                                         إلغاء

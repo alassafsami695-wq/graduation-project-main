@@ -22,6 +22,9 @@ export const RegisterSchema = z.object({
     password_confirmation: z
         .string()
         .min(1, { message: "تأكيد كلمة المرور مطلوب" }),
+    wallet_password: z
+        .string()
+        .min(4, { message: "كلمة مرور المحفظة يجب أن تكون 4 أحرف على الأقل" }),
 }).refine((data) => data.password === data.password_confirmation, {
     message: "كلمات المرور غير متطابقة",
     path: ["password_confirmation"],

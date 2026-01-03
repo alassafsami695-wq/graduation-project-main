@@ -26,7 +26,8 @@ export default function LessonComments({ lessonId, initialComments }: LessonComm
         const fetchComments = async () => {
             setIsLoadingComments(true);
             try {
-                const res = await getLessonComments(lessonId);
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const res: any = await getLessonComments(lessonId);
                 console.log("res", res);
                 if (Array.isArray(res)) {
                     setComments(res);
@@ -50,6 +51,7 @@ export default function LessonComments({ lessonId, initialComments }: LessonComm
 
         startTransition(async () => {
             // Optimistic update could go here, but let's wait for server response for ID
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const res: any = await postComment({ lesson_id: lessonId, body: content });
 
             if (res?.error) {
@@ -74,6 +76,7 @@ export default function LessonComments({ lessonId, initialComments }: LessonComm
         if (!confirm("Are you sure you want to delete this comment?")) return;
 
         startTransition(async () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const res: any = await deleteComment(commentId);
             if (res?.error) {
                 toast.error(res.error);

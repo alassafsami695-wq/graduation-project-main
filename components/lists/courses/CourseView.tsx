@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/cards/Card";
 import { Clock, Users, Star, PlayCircle, BookOpen, User, CheckCircle, Smartphone, Globe, Lock, HelpCircle } from "lucide-react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn, getValidVideoUrl } from "@/lib/utils";
 import LessonComments from "./LessonComments";
 import LessonQuestions from "./LessonQuestions";
 
@@ -15,6 +15,7 @@ interface CourseViewProps {
 }
 
 export default function CourseView({ course }: CourseViewProps) {
+    console.log(course);
     const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
     const [quizLesson, setQuizLesson] = useState<Lesson | null>(null);
 
@@ -62,7 +63,7 @@ export default function CourseView({ course }: CourseViewProps) {
                             <div className="space-y-6 mb-8">
                                 <div className="aspect-video bg-black rounded-xl overflow-hidden shadow-2xl ring-1 ring-slate-900/10">
                                     <iframe
-                                        src={currentLesson.video_url.replace("watch?v=", "embed/").replace("http://localhost:8000/storage/", "")}
+                                        src={getValidVideoUrl(currentLesson.video_url)}
                                         className="w-full h-full"
                                         allowFullScreen
                                         title={currentLesson.title}

@@ -1,0 +1,8 @@
+actions/student/questions.ts(5,10): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+actions/student/questions.ts(5,20): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+actions/student/questions.ts(5,34): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+actions/student/questions.ts(11,69): error TS2304: Cannot find name 'Question'.
+actions/student/questions.ts(22,14): error TS2304: Cannot find name 'SubmitAnswer'.
+actions/student/questions.ts(23,12): error TS2304: Cannot find name 'QuizResult'.
+app/(pages)/courses/[courseId]/page.tsx(28,28): error TS2741: Property 'lessons' is missing in type 'import("C:/Users/fayad/Downloads/Electronic_Academy-main/frontend - Copy - Copy/types/course.types").Course' but required in type 'import("C:/Users/fayad/Downloads/Electronic_Academy-main/frontend - Copy - Copy/types/course").Course'.
+components/lists/teacher/TeacherCourseLessonsClient.tsx(178,17): error TS2353: Object literal may only specify known properties, and 'course_id' does not exist in type 'Lesson'.

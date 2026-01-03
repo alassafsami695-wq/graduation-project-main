@@ -1,4 +1,5 @@
 import React from 'react';
+import { Course } from "@/types/course";
 import { getCourseData } from '@/actions/public/lessons/get-course-lessons';
 import CourseView from '@/components/lists/courses/CourseView';
 import { notFound } from 'next/navigation';
@@ -10,7 +11,8 @@ interface PageProps {
 }
 
 export default async function page({ params }: PageProps) {
-    const courseId = parseInt(params.courseId);
+    const { courseId: rawCourseId } = await params;
+    const courseId = parseInt(rawCourseId);
 
     if (isNaN(courseId)) {
         notFound();
@@ -23,7 +25,7 @@ export default async function page({ params }: PageProps) {
             notFound();
         }
 
-        return <CourseView course={course} />;
+        return <CourseView course={course as any} />;
     } catch (error) {
         console.error("Error fetching course data:", error);
         notFound();

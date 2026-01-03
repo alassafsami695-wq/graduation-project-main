@@ -5,7 +5,8 @@ export default async function Page() {
     const teachersResponse = await getTeachers();
 
     // The apiFetch returns json.data ?? json, so we need to handle both
-    const teachers = teachersResponse?.data || teachersResponse || [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const teachers = (teachersResponse as any)?.data || teachersResponse || [];
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">

@@ -1,4 +1,3 @@
-"use server";
 import { Suspense } from "react";
 import Slides from "@/components/home/Slides";
 import Features from "@/components/home/Features";
@@ -8,9 +7,9 @@ export default async function Home() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
-      {/* <Suspense fallback={<div className="h-[600px] w-full bg-slate-100 animate-pulse rounded-3xl" />}>
+      <Suspense fallback={<div className="h-[600px] w-full bg-slate-100 animate-pulse rounded-3xl" />}>
         <Slides />
-      </Suspense> */}
+      </Suspense>
 
       <Suspense fallback={<div className="h-96 w-full bg-slate-100 animate-pulse rounded-3xl" />}>
         <Features />

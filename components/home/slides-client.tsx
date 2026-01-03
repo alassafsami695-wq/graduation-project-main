@@ -21,9 +21,12 @@ type Slide = {
     [k: string]: any;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SlidesClient({ slides }: { slides: any }) {
 
     const [current, setCurrent] = useState(0);
+
+    console.log(slides);
 
     // Auto-slide (only if more than one slide)
     useEffect(() => {
@@ -46,7 +49,15 @@ export default function SlidesClient({ slides }: { slides: any }) {
     }
 
     const active = slides[current];
-    const imageUrl = active.image_url || active.image_path || active.image || "";
+    let imageUrl = active.image_url || active.image_path || active.image || "";
+
+    // Fix image URL if it doesn't start with http
+    if (imageUrl && !imageUrl.startsWith("http")) {
+        // Remove 'public/' or '/storage/' prefix if present to avoid duplication if backend sends it weirdly, 
+        // but mostly just handle the simple relative case
+        imageUrl = imageUrl.replace(/^public\//, "").replace(/^\/storage\//, "");
+        imageUrl = `http://localhost:8000/storage/${imageUrl}`;
+    }
 
     const formatDate = (d?: string | null) => {
         if (!d) return "—";
@@ -146,7 +157,8 @@ export default function SlidesClient({ slides }: { slides: any }) {
 
                     {/* indicators with thumbnails */}
                     <div className="hidden sm:flex items-center gap-2 ml-4">
-                        {slides.map((s, i) => {
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {slides.map((s: any, i: number) => {
                             const thumb = s.image_url || s.image_path || s.image || '';
                             return (
                                 <button key={s.id || i} onClick={() => setCurrent(i)} className={`flex items-center gap-2 p-1 rounded-md border ${current === i ? 'border-primary' : 'border-white/10'} transition-all`}>

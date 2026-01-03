@@ -5,6 +5,8 @@ import React from "react";
 export default async function AdminsPage() {
     const admins = await getAdmins();
 
+    console.log(admins)
+
     return (
         <div className="container mx-auto p-6 space-y-6">
             <div className="flex items-center justify-between">
@@ -27,8 +29,10 @@ export default async function AdminsPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                            {admins && admins.length > 0 ? (
-                                admins.map((admin: any) => (
+                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            {admins && (admins as any).data && (admins as any).data.length > 0 ? (
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                (admins as any).data.map((admin: any) => (
                                     <tr
                                         key={admin.id}
                                         className="group hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
