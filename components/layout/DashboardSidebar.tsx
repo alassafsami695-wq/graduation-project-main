@@ -32,7 +32,7 @@ const navItems = {
         { label: "نظرة عامة", href: "/dashboard/admin", icon: LayoutDashboard },
         { label: "الدورات", href: "/dashboard/admin/courses", icon: BookOpen },
         { label: "المميزات", href: "/dashboard/admin/features", icon: Zap },
-        { label: "السلايدر", href: "/dashboard/admin/slides", icon: Image },
+        { label: "السلايدر", href: "/dashboard/admin/sliders", icon: Image },
         { label: "المسؤولين", href: "/dashboard/admin/admins", icon: ShieldAlert },
         { label: "المدرسين", href: "/dashboard/admin/teachers", icon: UserRound },
         { label: "معلومات التواصل", href: "/dashboard/admin/contact-settings", icon: Info },

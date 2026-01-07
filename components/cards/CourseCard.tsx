@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import React, { useState } from "react";
-import { Star, Users, Clock, ArrowRight, Heart } from "lucide-react";
+import { Star, Users, Clock, ArrowRight, Heart, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Course } from "@/types/course.types";
 import { Card, CardContent, CardFooter } from "./Card";
@@ -19,6 +19,8 @@ interface CourseCardProps {
 export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     const [isWishlisted, setIsWishlisted] = useState(course.is_wishlisted || false);
     const [isLoading, setIsLoading] = useState(false);
+    const { items } = useCartStore();
+    const isInCart = items.some(item => item.id === course.id);
 
     const defaultImage = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop";
     const courseImage = course.photo || defaultImage;
@@ -104,20 +106,28 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                 </CardContent>
 
                 <CardFooter className="p-6 pt-0 flex gap-3 items-center justify-between">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-wrap">
                         {course.is_enrolled && (
-                            <span className="bg-emerald-500/10 text-emerald-600 px-3 py-1 rounded-full text-sm font-medium border border-emerald-500/20">
+                            <span className="bg-emerald-500/10 text-emerald-600 px-3 py-1 rounded-full text-sm font-medium border border-emerald-500/20 flex items-center gap-1">
+                                <CheckCircle className="w-3 h-3" />
                                 تم الشراء
                             </span>
                         )}
+                        {isInCart && !course.is_enrolled && (
+                            <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium border border-primary/20 flex items-center gap-1">
+                                <ShoppingBag className="w-3 h-3" />
+                                في السلة
+                            </span>
+                        )}
                         {isWishlisted && !course.is_enrolled && (
-                            <span className="bg-rose-500/10 text-rose-600 px-3 py-1 rounded-full text-sm font-medium border border-rose-500/20">
+                            <span className="bg-rose-500/10 text-rose-600 px-3 py-1 rounded-full text-sm font-medium border border-rose-500/20 flex items-center gap-1">
+                                <Heart className="w-3 h-3 fill-current" />
                                 في المفضلة
                             </span>
                         )}
                     </div>
 
-                    {!course.is_enrolled && (
+                    {!course.is_enrolled && !isInCart && (
                         <div className="ml-auto">
                             <CartActionButton course={course} />
                         </div>

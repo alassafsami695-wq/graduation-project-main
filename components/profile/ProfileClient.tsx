@@ -21,6 +21,7 @@ import {
 import { useAuthStore } from "@/store/auth";
 import { toast } from "sonner";
 import { updateProfile } from "@/actions/public/profile/update-profile";
+import { getFullUrl } from "@/lib/utils";
 import ChargeWalletModal from "./ChargeWalletModal";
 import UpdateWalletModal from "./UpdateWalletModal";
 import WithdrawWalletModal from "./WithdrawWalletModal";
@@ -37,9 +38,12 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
     const [isChargeModalOpen, setIsChargeModalOpen] = useState(false);
     const [isUpdateWalletOpen, setIsUpdateWalletOpen] = useState(false);
     const [isWithdrawWalletOpen, setIsWithdrawWalletOpen] = useState(false);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
     // Fallback to initialData if user is not yet populated, though useAuthStore is preferred
     const profile = user || initialData;
+
+    console.log(profile)
 
     const [formData, setFormData] = useState({
         name: profile?.name || "",
@@ -93,6 +97,34 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
         }
     };
 
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setIsLoading(true);
+            const formData = new FormData();
+            formData.append("photo", file);
+
+            const res = await updateProfile(formData);
+
+            if (res?.data || res?.id) {
+                const updatedUser = res.data || res;
+                // @ts-ignore
+                setAuth(updatedUser, token!);
+                toast.success("تم تحديث الصورة الشخصية بنجاح");
+            } else {
+                toast.success("تم تحديث الصورة الشخصية بنجاح");
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("حدث خطأ أثناء تحديث الصورة");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const defaultAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile?.email || 'default'}`;
     const userPhoto = profile?.photo || defaultAvatar;
 
@@ -125,12 +157,23 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
                     <div className="relative group">
                         <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white/30 p-1 backdrop-blur-md shadow-2xl relative">
                             <img
-                                src={userPhoto}
+                                src={getFullUrl(userPhoto)}
                                 alt={profile?.name}
                                 className="w-full h-full rounded-full object-cover"
                             />
-                            <button className="absolute bottom-2 right-2 p-2.5 bg-white text-primary rounded-full shadow-lg hover:scale-110 transition-transform">
-                                <Camera className="w-5 h-5" />
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleImageChange}
+                                accept="image/*"
+                                className="hidden"
+                            />
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isLoading}
+                                className="absolute bottom-2 right-2 p-2.5 bg-white text-primary rounded-full shadow-lg hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <Camera className={`w-5 h-5 ${isLoading ? "animate-pulse" : ""}`} />
                             </button>
                         </div>
                     </div>
@@ -330,19 +373,21 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
                                         >
                                             شحن الرصيد
                                         </button>
-                                        <button
-                                            onClick={() => setIsWithdrawWalletOpen(true)}
-                                            className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
-                                        >
-                                            سحب الرصيد
-                                        </button>
+                                        {profile?.type !== 'user' && (
+                                            <button
+                                                onClick={() => setIsWithdrawWalletOpen(true)}
+                                                className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
+                                            >
+                                                سحب الرصيد
+                                            </button>
+                                        )}
                                         <button
                                             onClick={() => setIsUpdateWalletOpen(true)}
                                             className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
                                         >
                                             تحديث المحفظة
                                         </button>
-                                        <button className="px-8 py-3 bg-primary-dark/20 backdrop-blur-md border border-white/20 text-white font-black rounded-2xl hover:bg-white/10 transition-all">سجل المعاملات</button>
+                                        {/* Remove Transaction History Button */}
                                     </div>
                                 </div>
 
@@ -359,3 +404,4 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
 };
 
 export default ProfileClient;
+

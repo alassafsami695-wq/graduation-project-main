@@ -5,6 +5,7 @@ import { Search, UserCheck, UserX, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { toggleUser } from "@/actions/admin/users/toggle-user-status";
+import UserRoleToggle from "@/components/admin/UserRoleToggle";
 
 interface UserData {
     id: number;
@@ -99,6 +100,19 @@ export default function UserManager({ initialUsers, roleTitle }: UserManagerProp
                             </div>
 
                             <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                                <UserRoleToggle
+                                    userId={user.id}
+                                    userName={user.name}
+                                    currentRole={roleTitle === 'المعلمين' ? 'teacher' : 'user'} // Infer role from title or prop
+                                    onSuccess={() => {
+                                        // Optional: refresh logic if needed, but revalidatePath handles server side
+                                        // If we want to remove them from the list if they become admin:
+                                        // handleRemoveUser(user.id);
+                                        // But usually they might just update. 
+                                        // For now, let's keep them in the list.
+                                    }}
+                                />
+
                                 <Button
                                     onClick={() => handleToggleStatus(user.id)}
                                     disabled={loadingId === user.id}

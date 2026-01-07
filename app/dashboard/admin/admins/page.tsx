@@ -1,6 +1,7 @@
 import { getAdmins } from "@/actions/admin/users/get-admins";
 import { User, Shield, Mail, Calendar } from "lucide-react";
 import React from "react";
+import UserRoleToggle from "@/components/admin/UserRoleToggle";
 
 export default async function AdminsPage() {
     const admins = await getAdmins();
@@ -25,7 +26,7 @@ export default async function AdminsPage() {
                                 <th className="p-4 text-sm font-bold text-foreground-muted whitespace-nowrap">المسؤول</th>
                                 <th className="p-4 text-sm font-bold text-foreground-muted whitespace-nowrap">البريد الإلكتروني</th>
                                 <th className="p-4 text-sm font-bold text-foreground-muted whitespace-nowrap">تاريخ الانضمام</th>
-                                {/* <th className="p-4 text-sm font-bold text-foreground-muted whitespace-nowrap">الإجراءات</th> */}
+                                <th className="p-4 text-sm font-bold text-foreground-muted whitespace-nowrap">الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
@@ -68,9 +69,14 @@ export default async function AdminsPage() {
                                                 </span>
                                             </div>
                                         </td>
-                                        {/* <td className="p-4">
-                      Actions like Edit/Delete could go here
-                    </td> */}
+                                        <td className="p-4">
+                                            <UserRoleToggle
+                                                userId={admin.id}
+                                                userName={admin.name}
+                                                currentRole="admin"
+                                                isSuperAdmin={admin.rol_id === 1}
+                                            />
+                                        </td>
                                     </tr>
                                 ))
                             ) : (

@@ -42,7 +42,7 @@ export async function loginAction(values: LoginInput): Promise<ActionResponse> {
         } else if (userType === "super_admin") {
             redirectTo = "/dashboard/admin";
         } else if (userType === "user") {
-            redirectTo = "/dashboard/student";
+            redirectTo = "/";
         }
 
         return {
@@ -66,6 +66,7 @@ export async function registerStudentAction(values: RegisterInput): Promise<Acti
                 password: values.password,
                 password_confirmation: values.password_confirmation,
                 wallet_password: values.wallet_password,
+                account_number: values.account_number,
             },
         });
 
@@ -90,6 +91,7 @@ export async function registerTeacherAction(values: RegisterInput): Promise<Acti
                 password: values.password,
                 password_confirmation: values.password_confirmation,
                 wallet_password: values.wallet_password,
+                account_number: values.account_number,
             },
         });
 

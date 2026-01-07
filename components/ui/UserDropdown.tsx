@@ -17,6 +17,7 @@ import {
 import { useAuthStore } from "@/store/auth";
 import { logoutAction } from "@/actions/public/auth";
 import { useRouter } from "next/navigation";
+import { getFullUrl } from "@/lib/utils";
 
 export default function UserDropdown() {
 
@@ -63,7 +64,7 @@ export default function UserDropdown() {
             >
                 <div className="w-10 h-10 rounded-full overflow-hidden border border-border shadow-sm">
                     <img
-                        src={userPhoto}
+                        src={getFullUrl(userPhoto)}
                         alt={user.name || "User"}
                         className="w-full h-full object-cover"
                         onError={(e) => {
@@ -95,18 +96,20 @@ export default function UserDropdown() {
                         </div>
 
                         <div className="p-2">
-                            <DropdownItem
-                                href={
-                                    user.type === "super_admin"
-                                        ? "/dashboard/admin"
-                                        : user.type === "teacher"
-                                            ? "/dashboard/teacher"
-                                            : "/dashboard/student"
-                                }
-                                icon={<LayoutDashboard className="w-4 h-4" />}
-                                label="لوحة التحكم"
-                                onClick={() => setIsOpen(false)}
-                            />
+                            {user.type !== "user" && (
+                                <DropdownItem
+                                    href={
+                                        user.type === "super_admin"
+                                            ? "/dashboard/admin"
+                                            : user.type === "teacher"
+                                                ? "/dashboard/teacher"
+                                                : "/dashboard/student"
+                                    }
+                                    icon={<LayoutDashboard className="w-4 h-4" />}
+                                    label="لوحة التحكم"
+                                    onClick={() => setIsOpen(false)}
+                                />
+                            )}
                             <DropdownItem
                                 href="/profile"
                                 icon={<User className="w-4 h-4" />}
@@ -122,7 +125,7 @@ export default function UserDropdown() {
                             {user.type === "user" && (
                                 <DropdownItem
                                     href="/my-courses"
-                                    icon={<Tv className="w-4 h-4" />}
+                                    icon={<BookOpen className="w-4 h-4" />}
                                     label="دوراتي"
                                     onClick={() => setIsOpen(false)}
                                 />

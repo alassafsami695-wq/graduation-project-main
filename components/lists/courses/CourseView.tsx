@@ -70,10 +70,21 @@ export default function CourseView({ course }: CourseViewProps) {
                                     />
                                 </div>
 
+                                <div className="flex justify-end">
+                                    <CompleteLessonButton
+                                        lessonId={currentLesson.id}
+                                        isCompleted={false}
+                                        onComplete={() => {
+                                            // Optional: Update local state if needed
+                                        }}
+                                    />
+                                </div>
+
                                 <LessonComments
                                     key={currentLesson.id} // Re-mount on lesson change
                                     lessonId={currentLesson.id}
                                     initialComments={currentLesson.comments || []}
+                                    teacherId={course.teacher.id}
                                 />
                             </div>
                         )}
@@ -273,5 +284,50 @@ export default function CourseView({ course }: CourseViewProps) {
                 lessonTitle={quizLesson?.title || ""}
             />
         </div>
+    );
+}
+
+import { Check } from "lucide-react";
+import { completeLessonAction } from "@/actions/student/lessons/complete-lesson";
+import { toast } from "sonner";
+import { useTransition } from "react";
+
+function CompleteLessonButton({ lessonId, isCompleted, onComplete }: { lessonId: number, isCompleted: boolean, onComplete?: () => void }) {
+    const [isPending, startTransition] = useTransition();
+    const [completed, setCompleted] = useState(isCompleted);
+
+    const handleComplete = () => {
+        if (completed || isPending) return;
+
+        startTransition(async () => {
+            const res = await completeLessonAction(lessonId);
+            if (res.success) {
+                setCompleted(true);
+                toast.success("مبروك! أنهيت الدرس");
+                onComplete?.();
+            } else {
+                toast.error(res.error || "حدث خطأ");
+            }
+        });
+    };
+
+    if (completed) {
+        return (
+            <Button variant="outline" className="gap-2 text-emerald-600 border-emerald-200 bg-emerald-50 pointer-events-none">
+                <Check className="w-4 h-4" />
+                تم الإكمال
+            </Button>
+        );
+    }
+
+    return (
+        <Button
+            onClick={handleComplete}
+            disabled={isPending}
+            className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white"
+        >
+            {isPending ? "جاري الحفظ..." : "إكمال الدرس"}
+            <CheckCircle className="w-4 h-4" />
+        </Button>
     );
 }

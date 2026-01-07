@@ -174,6 +174,22 @@ export default function RegisterForm() {
                                 <p className="text-xs text-red-500 mr-1 mt-1">{errors.wallet_password.message}</p>
                             )}
                         </div>
+
+                        <div className="space-y-1">
+                            <label className="text-sm font-medium mr-1">رقم حساب شام كاش</label>
+                            <div className="relative">
+                                <AlertCircle className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground-muted" />
+                                <Input
+                                    {...register("account_number")}
+                                    placeholder="مثلاً: 123456"
+                                    className="pr-11 bg-bg-primary/50 border-border focus:ring-primary focus:border-primary rounded-xl transition-all"
+                                    disabled={isPending}
+                                />
+                            </div>
+                            {errors.account_number && (
+                                <p className="text-xs text-red-500 mr-1 mt-1">{errors.account_number.message}</p>
+                            )}
+                        </div>
                     </div>
 
                     <Button
