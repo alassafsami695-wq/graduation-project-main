@@ -23,10 +23,9 @@ export function ThemeToggle() {
         <button
             type="button"
             onClick={toggleTheme}
-            className="relative inline-flex items-center justify-center w-10 h-10 rounded-xl 
+            className="relative inline-flex items-center justify-center w-10 h-10 rounded-md 
                  bg-slate-100 dark:bg-slate-800 
                  hover:bg-slate-200 dark:hover:bg-slate-700
-                 border border-slate-200 dark:border-slate-700
                  transition-all duration-300 group
                  focus:outline-none focus:ring-2 focus:ring-primary-500/50"
             aria-label={theme === "light" ? "تفعيل الوضع الداكن" : "تفعيل الوضع الفاتح"}

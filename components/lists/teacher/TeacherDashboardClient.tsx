@@ -53,21 +53,8 @@ const TeacherDashboardClient: React.FC<TeacherDashboardClientProps> = ({ stats }
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
                     <h1 className="text-4xl font-black mb-2 italic">
-                        أهلاً بك، <span className="text-secondary">يا معلم الجيل</span>
+                        لوحة تحكم المعلم
                     </h1>
-                    <p className="text-foreground-muted flex items-center gap-2">
-                        <Trophy className="w-4 h-4 text-yellow-500" />
-                        لديك اليوم 3 محاضرات مباشرة ومهمتين للمراجعة
-                    </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <button className="flex items-center gap-2 px-6 py-3 bg-secondary text-white font-black rounded-2xl hover:shadow-xl hover:shadow-secondary/20 transition-all active:scale-95">
-                        <Plus className="w-5 h-5" />
-                        <span>إنشاء دورة جديدة</span>
-                    </button>
-                    <button className="p-3 bg-bg-secondary border border-border rounded-2xl hover:border-secondary/50 transition-all">
-                        <Calendar className="w-5 h-5" />
-                    </button>
                 </div>
             </div>
 

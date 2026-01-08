@@ -10,15 +10,6 @@ type ApiFetchOptions = {
   headers?: HeadersInit;
 };
 
-function buildQuery(params?: Record<string, any>) {
-  if (!params) return "";
-  const q = Object.entries(params)
-    .filter(([, v]) => v !== undefined && v !== null)
-    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
-    .join("&");
-  return q ? `?${q}` : "";
-}
-
 export async function apiFetch<T>(
   endpoint: string,
   options: ApiFetchOptions = {}
@@ -27,10 +18,7 @@ export async function apiFetch<T>(
   const token = cookieStore.get("token")?.value;
 
   const url = `${BASE_URL}${endpoint}`;
-
   const isFormData = options.body instanceof FormData;
-
-
 
   const res = await fetch(url, {
     method: options.method ?? "GET",

@@ -9,7 +9,6 @@ export async function generateQuestionsAction(lessonId: number, text: string) {
             method: "POST",
             body: { text }
         });
-        revalidatePath("/dashboard/teacher/exams");
         return res;
     } catch (error: any) {
         throw new Error(error.message || "Failed to generate questions");

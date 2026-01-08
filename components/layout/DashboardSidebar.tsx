@@ -105,23 +105,6 @@ export default function DashboardSidebar() {
                     );
                 })}
             </nav>
-
-            <div className="p-6">
-                <div className="bg-bg-primary/50 border border-border rounded-2xl p-4 space-y-3">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
-                            <ShieldAlert className="w-4 h-4 text-secondary" />
-                        </div>
-                        <span className="text-xs font-bold">تحتاج مساعدة؟</span>
-                    </div>
-                    <p className="text-[10px] text-foreground-muted leading-relaxed">
-                        تواصل مع الدعم الفني للحصول على المساعدة في إدارة حسابك.
-                    </p>
-                    <button className="w-full py-2 bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-bold rounded-lg transition-colors">
-                        مركز المساعدة
-                    </button>
-                </div>
-            </div>
         </aside>
     );
 }

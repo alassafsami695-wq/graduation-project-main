@@ -55,7 +55,7 @@ export default function SlidesClient({ slides = [] }: { slides: Slide[] }) {
     const prev = () => setCurrent((p) => (p - 1 + total) % total);
 
     return (
-        <section className="relative w-full h-[520px] md:h-[600px] overflow-hidden rounded-3xl">
+        <section className="relative w-full h-[520px] md:h-screen overflow-hidden">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={active.id}
@@ -72,10 +72,10 @@ export default function SlidesClient({ slides = [] }: { slides: Slide[] }) {
                     />
 
                     {/* Overlay for readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" />
+                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" /> */}
 
                     {/* Content */}
-                    <div className="relative h-full max-w-7xl mx-auto px-6 md:px-12 flex items-end pb-16">
+                    <div className="relative h-full px-6 md:px-12 flex items-end pb-16">
                         <div className="max-w-2xl text-white">
                             <h2 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4">
                                 {active.title}

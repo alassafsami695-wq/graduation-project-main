@@ -8,7 +8,6 @@ export default async function BestSellingCourses() {
     const courses: Course[] = await bestSellingCourses();
 
     if (courses.length === 0) return null;
-
     return (
         <section className="py-24 bg-bg-primary">
             <div className="max-w-7xl mx-auto px-4">
@@ -21,14 +20,7 @@ export default async function BestSellingCourses() {
                             </span>
                             الدورات الأكثر مبيعاً
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-black text-gradient">
-                            ابدأ رحلة التعلم اليوم
-                        </h2>
-                        <p className="text-foreground-muted text-lg max-w-2xl leading-relaxed">
-                            انضم إلى آلاف الطلاب الذين غيروا حياتهم من خلال دوراتنا الاحترافية المصممة من قبل خبراء الصناعة.
-                        </p>
                     </div>
-
                     <Link
                         href="/courses"
                         className="group flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all duration-300"

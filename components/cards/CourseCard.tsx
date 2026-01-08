@@ -52,7 +52,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             <Card className="overflow-hidden border-border bg-bg-secondary/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 rounded-3xl group relative">
                 <div className="relative aspect-video overflow-hidden">
                     <img
-                        src={courseImage}
+                        src={`http://localhost:8000/storage/${course.photo}`}
                         alt={course.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />

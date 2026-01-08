@@ -76,10 +76,29 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({ isOpen, onClose, course
         setIsSubmitting(true);
         try {
             const res = await generateQuestionsAction(Number(selectedLessonId), aiText) as any;
-            // Process the weird nested response from the controller
-            const mcqs = res.questions?.multiple_choice?.questions?.map((q: any) => ({ ...q, type: "mcq" })) || [];
-            const tfs = res.questions?.true_false?.questions?.map((q: any) => ({ ...q, type: "true_false" })) || [];
-            setGeneratedQuestions([...mcqs, ...tfs]);
+            // Process the response (assuming same structure or flat array)
+            // Ideally we should know the exact structure. For now supporting the previous structure or direct array.
+            let questions = [];
+            if (res.questions) {
+                const mcqs = res.questions.multiple_choice?.questions?.map((q: any) => ({ ...q, type: "mcq" })) || [];
+                const tfs = res.questions.true_false?.questions?.map((q: any) => ({ ...q, type: "true_false" })) || [];
+                questions = [...mcqs, ...tfs];
+            } else if (Array.isArray(res)) {
+                questions = res;
+            } else {
+                // Fallback if structure is unknown but contains direct keys
+                questions = [
+                    ...(res.multiple_choice?.questions?.map((q: any) => ({ ...q, type: "mcq" })) || []),
+                    ...(res.true_false?.questions?.map((q: any) => ({ ...q, type: "true_false" })) || [])
+                ];
+            }
+
+            if (questions.length === 0) {
+                // Try parsing raw if it's there? No, let's assume valid response.
+                // Just in case check for 'data' wrapper if apiFetch didn't unwrap it (apiFetch usually unwraps).
+            }
+
+            setGeneratedQuestions(questions);
             toast.success("تم توليد الأسئلة بنجاح! يمكنك مراجعتها وحفظها");
         } catch (error: any) {
             toast.error(error.message);
@@ -88,15 +107,26 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({ isOpen, onClose, course
         }
     };
 
-    const handleSaveManual = async () => {
+    const handleSave = async () => {
         if (!selectedLessonId) return toast.error("يرجى اختيار درس أولاً");
-        if (manualQuestions.some(q => !q.question || !q.answer)) {
-            return toast.error("يرجى إكمال جميع نص الأسئلة والإجابات");
+
+        let questionsToSave = [];
+
+        if (activeTab === "manual") {
+            if (manualQuestions.some(q => !q.question || !q.answer)) {
+                return toast.error("يرجى إكمال جميع نص الأسئلة والإجابات");
+            }
+            questionsToSave = manualQuestions;
+        } else {
+            if (generatedQuestions.length === 0) {
+                return toast.error("لا يوجد أسئلة مولدة للحفظ");
+            }
+            questionsToSave = generatedQuestions;
         }
 
         setIsSubmitting(true);
         try {
-            await storeQuestionsAction(Number(selectedLessonId), manualQuestions);
+            await storeQuestionsAction(Number(selectedLessonId), questionsToSave);
             toast.success("تم حفظ الأسئلة بنجاح");
             onClose();
         } catch (error: any) {
@@ -328,7 +358,7 @@ const QuestionDialog: React.FC<QuestionDialogProps> = ({ isOpen, onClose, course
                     {/* Footer Actions */}
                     <div className="p-6 border-t border-border bg-bg-primary/50 flex gap-4 shrink-0">
                         <Button
-                            onClick={handleSaveManual}
+                            onClick={handleSave}
                             disabled={isSubmitting || !selectedLessonId || (activeTab === "manual" && manualQuestions.length === 0) || (activeTab === "ai" && generatedQuestions.length === 0)}
                             className={`flex-1 h-14 rounded-2xl text-white font-black text-lg shadow-xl ${activeTab === "manual" ? "bg-secondary shadow-secondary/20" : "bg-primary shadow-primary/20"}`}
                         >
