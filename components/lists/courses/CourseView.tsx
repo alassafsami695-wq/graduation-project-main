@@ -108,7 +108,7 @@ export default function CourseView({ course }: CourseViewProps) {
                             <Card className="bg-white/95 backdrop-blur shadow-lg border-none">
                                 <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-1">
                                     <BookOpen className="w-6 h-6 text-indigo-600" />
-                                    <span className="font-bold text-slate-900">{course.lessons.length}</span>
+                                    <span className="font-bold text-slate-900">{course?.lessons?.length}</span>
                                     <span className="text-xs text-slate-500">دروس</span>
                                 </CardContent>
                             </Card>
@@ -128,7 +128,7 @@ export default function CourseView({ course }: CourseViewProps) {
                             </CardHeader>
                             <CardContent className="p-0">
                                 <div className="divide-y divide-slate-100">
-                                    {course.lessons.map((lesson, index) => (
+                                    {course?.lessons?.map((lesson, index) => (
                                         <div
                                             key={lesson.id}
                                             className={cn(
