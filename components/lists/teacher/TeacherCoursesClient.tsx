@@ -13,6 +13,8 @@ import { getCategories } from "@/actions/public/categories/get-categories";
 import { toast } from "sonner";
 import { Card } from "@/components/cards/Card";
 
+
+
 interface TeacherCoursesClientProps {
     courses: Course[];
 }
@@ -187,16 +189,26 @@ const TeacherCoursesClient: React.FC<TeacherCoursesClientProps> = ({ courses }) 
                                     <div className="p-4 md:p-6 flex flex-col md:flex-row items-center gap-6">
                                         <div className="w-full md:w-40 aspect-video md:aspect-square shrink-0 overflow-hidden rounded-xl relative">
                                             <img
-                                                src={course.photo || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop"}
+                                                src={(() => {
+                                                    if (!course.photo) return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop";
+                                                    let p = course.photo;
+                                                    if (p.includes('http') && p.lastIndexOf('http') > 0) p = p.substring(p.lastIndexOf('http'));
+                                                    if (p.startsWith('http')) {
+                                                        if (p.includes('/courses/') && !p.includes('/storage/')) return p.replace('/courses/', '/storage/courses/');
+                                                        return p;
+                                                    }
+                                                    return `http://127.0.0.1:8000/storage/${p.startsWith('/') ? p.slice(1) : p}`;
+                                                })()}
                                                 alt={course.title}
                                                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                                             />
                                         </div>
 
+
                                         <div className="flex-1 min-w-0 text-center md:text-right">
                                             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
                                                 <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">
-                                                    {course.price === 0 || course.price === "0" ? "مجاني" : `${course.price} ريال`}
+                                                    {course.price === 0 || course.price === "0" ? "مجاني" : `${course.price} ل.س`}
                                                 </span>
                                                 <span className="px-3 py-1 bg-bg-secondary text-foreground-muted text-xs font-bold rounded-full flex items-center gap-1">
                                                     <BookOpen className="w-3 h-3" />

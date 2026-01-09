@@ -3,7 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowUpLeft } from "lucide-react";
-import { getFullUrl } from "@/lib/utils";
+
 
 interface Feature {
     id: number;
@@ -37,7 +37,7 @@ const itemVariants = {
 
 const FeaturesClient = ({ features }: FeaturesClientProps) => {
     return (
-        <section className="relative py-20 overflow-hidden bg-background">
+        <section className="relative py-20 overflow-hidden bg-background max-w-7xl mx-auto px-4 space-y-16">
             {/* Decorative Background Blobs */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-3xl -z-10 -translate-x-1/2 translate-y-1/2" />
@@ -45,15 +45,6 @@ const FeaturesClient = ({ features }: FeaturesClientProps) => {
             <div className="container px-4 mx-auto">
                 {/* Header Section */}
                 <div className="flex flex-col items-center text-center mb-20 space-y-6">
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 text-primary text-sm font-bold border border-primary/10 shadow-sm backdrop-blur-sm"
-                    >
-                        <Sparkles size={14} className="animate-pulse" />
-                        <span>المميزات الذكية</span>
-                    </motion.div>
 
                     <motion.h2
                         initial={{ opacity: 0, y: 10 }}
@@ -92,7 +83,7 @@ const FeaturesClient = ({ features }: FeaturesClientProps) => {
                             <motion.div
                                 key={feature.id}
                                 variants={itemVariants}
-                                className="group relative flex flex-col h-[400px] rounded-3xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-colors duration-500"
+                                className="group relative flex flex-col h-[400px] rounded-xl overflow-hidden bg-card border border-border/50 hover:border-primary/50 transition-colors duration-500 shadow shadow-md"
                             >
                                 {/* Image Section (Top Half) */}
                                 <div className="relative h-[200px] overflow-hidden">
@@ -100,7 +91,13 @@ const FeaturesClient = ({ features }: FeaturesClientProps) => {
                                     <div
                                         className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                                         style={{
-                                            backgroundImage: `url(${getFullUrl(feature.image) || fallbackImage})`,
+                                            backgroundImage: `url(${(() => {
+                                                if (!feature.image) return fallbackImage;
+                                                let p = feature.image;
+                                                if (p.includes('http') && p.lastIndexOf('http') > 0) p = p.substring(p.lastIndexOf('http'));
+                                                if (p.startsWith('http')) return p;
+                                                return `http://127.0.0.1:8000/storage/${p.startsWith('/') ? p.slice(1) : p}`;
+                                            })()})`,
                                         }}
                                     />
                                 </div>

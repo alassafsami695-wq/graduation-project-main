@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Almarai } from "next/font/google";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
@@ -7,10 +7,10 @@ import Navbar from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Toaster } from "sonner";
 
-const almarai = Almarai({
+const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   subsets: ["arabic"],
-  variable: "--font-almarai",
-  weight: ["300", "400", "700", "800"],
+  variable: "--font-ibm-plex-arabic",
+  weight: ["100", "200", "300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="sm:scroll-smooth">
       <body
-        className={`${almarai.variable} font-sans antialiased bg-bg-primary text-foreground transition-colors duration-300 min-h-screen flex flex-col`}
+        className={`${ibmPlexArabic.variable} font-sans antialiased bg-bg-primary text-foreground transition-colors duration-300 min-h-screen flex flex-col`}
       >
         <ThemeProvider>
           <Toaster position="top-center" richColors />

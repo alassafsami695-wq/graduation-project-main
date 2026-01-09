@@ -65,7 +65,7 @@
     --color-border: var(--border);
 
     /* Typography */
-    --font-sans: var(--font-almarai), ui-sans-serif, system-ui, sans-serif;
+    --font-sans: var(--font-ibm-plex-arabic), ui-sans-serif, system-ui, sans-serif;
 
     /* Animations */
     --animate-blob: blob 7s infinite;

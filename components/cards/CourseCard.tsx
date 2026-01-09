@@ -12,6 +12,8 @@ import { useCartStore } from "@/store/cart";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "../ui/Button";
 
+
+
 interface CourseCardProps {
     course: Course;
 }
@@ -23,7 +25,20 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     const isInCart = items.some(item => item.id === course.id);
 
     const defaultImage = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop";
-    const courseImage = course.photo || defaultImage;
+    const courseImage = (() => {
+        if (!course.photo) return defaultImage;
+        let p = course.photo;
+        if (p.includes('http') && p.lastIndexOf('http') > 0) {
+            p = p.substring(p.lastIndexOf('http'));
+        }
+        if (p.startsWith('http')) {
+            if (p.includes('/courses/') && !p.includes('/storage/')) {
+                return p.replace('/courses/', '/storage/courses/');
+            }
+            return p;
+        }
+        return `http://127.0.0.1:8000/storage/${p.startsWith('/') ? p.slice(1) : p}`;
+    })();
 
     const handleToggleWishlist = async (e: React.MouseEvent) => {
         e.preventDefault();
@@ -52,10 +67,11 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             <Card className="overflow-hidden border-border bg-bg-secondary/50 backdrop-blur-sm hover:shadow-xl transition-all duration-300 rounded-3xl group relative">
                 <div className="relative aspect-video overflow-hidden">
                     <img
-                        src={`http://localhost:8000/storage/${course.photo}`}
+                        src={course.photo || defaultImage}
                         alt={course.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
+
 
                     {/* Wishlist Toggle Button */}
                     <button
@@ -80,7 +96,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                     </button>
 
                     <div className="absolute top-4 right-4 bg-primary/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                        {typeof course.price === 'number' ? `${course.price} ريال` : course.price}
+                        {typeof course.price === 'number' ? `${course.price} ل.س` : course.price}
                     </div>
                 </div>
 

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { purchaseCourses } from "@/actions/student/purchase-courses";
 import { toast } from "sonner";
-import { getFullUrl } from "@/lib/utils";
+
 
 export default function CartPage() {
     const { items, removeItem, clearCart, total } = useCartStore();
@@ -66,7 +66,16 @@ export default function CartPage() {
                                 <div className="relative w-1/3 sm:w-40 h-32 sm:h-28 flex-shrink-0 bg-muted rounded-xl overflow-hidden">
                                     {item.photo ? (
                                         <Image
-                                            src={getFullUrl(item.photo)}
+                                            src={(() => {
+                                                if (!item.photo) return "/placeholder-course.png";
+                                                let p = item.photo;
+                                                if (p.includes('http') && p.lastIndexOf('http') > 0) p = p.substring(p.lastIndexOf('http'));
+                                                if (p.startsWith('http')) {
+                                                    if (p.includes('/courses/') && !p.includes('/storage/')) return p.replace('/courses/', '/storage/courses/');
+                                                    return p;
+                                                }
+                                                return `http://127.0.0.1:8000/storage/${p.startsWith('/') ? p.slice(1) : p}`;
+                                            })()}
                                             alt={item.title}
                                             fill
                                             className="object-cover"
@@ -90,7 +99,7 @@ export default function CartPage() {
 
                                     <div className="flex items-center justify-between mt-4">
                                         <span className="text-xl font-bold text-primary">
-                                            {typeof item.price === 'number' ? `$${item.price}` : item.price}
+                                            {typeof item.price === 'number' ? `${item.price} ل.س` : item.price}
                                         </span>
 
                                         <button
@@ -114,15 +123,15 @@ export default function CartPage() {
                             <div className="space-y-3 mb-6">
                                 <div className="flex justify-between text-muted-foreground">
                                     <span>المجموع الفرعي</span>
-                                    <span>${total.toFixed(2)}</span>
+                                    <span>{total.toFixed(0)} ل.س</span>
                                 </div>
                                 <div className="flex justify-between text-muted-foreground">
                                     <span>الخصم</span>
-                                    <span>$0.00</span>
+                                    <span>0 ل.س</span>
                                 </div>
                                 <div className="border-t border-border pt-3 mt-3 flex justify-between font-bold text-lg">
                                     <span>الإجمالي</span>
-                                    <span>${total.toFixed(2)}</span>
+                                    <span>{total.toFixed(0)} ل.س</span>
                                 </div>
                             </div>
 

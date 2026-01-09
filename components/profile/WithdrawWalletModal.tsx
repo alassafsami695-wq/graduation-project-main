@@ -22,7 +22,7 @@ export default function WithdrawWalletModal({ isOpen, onClose, wallet }: Withdra
         e.preventDefault();
 
         if (!amount || isNaN(Number(amount)) || Number(amount) < 100) {
-            toast.error("أقل مبلغ للسحب هو 100 ريال");
+            toast.error("أقل مبلغ للسحب هو 100 ل.س");
             return;
         }
 
@@ -96,7 +96,7 @@ export default function WithdrawWalletModal({ isOpen, onClose, wallet }: Withdra
                     {/* Balance Display */}
                     <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-200 dark:border-emerald-800">
                         <p className="text-sm text-emerald-600 dark:text-emerald-400 font-bold">الرصيد المتاح</p>
-                        <p className="text-2xl font-black text-emerald-700 dark:text-emerald-300">{wallet?.balance || 0} ريال</p>
+                        <p className="text-2xl font-black text-emerald-700 dark:text-emerald-300">{wallet?.balance || 0} ل.س</p>
                     </div>
 
                     {step === 'success' ? (
@@ -110,7 +110,7 @@ export default function WithdrawWalletModal({ isOpen, onClose, wallet }: Withdra
                     ) : (
                         <>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-foreground-muted">المبلغ المراد سحبه (ريال)</label>
+                                <label className="text-sm font-bold text-foreground-muted">المبلغ المراد سحبه (ل.س)</label>
                                 <div className="relative">
                                     <input
                                         type="number"
@@ -121,7 +121,7 @@ export default function WithdrawWalletModal({ isOpen, onClose, wallet }: Withdra
                                         max={wallet?.balance}
                                     />
                                 </div>
-                                <p className="text-xs text-slate-500 text-center">أقل مبلغ للسحب هو 100 ريال</p>
+                                <p className="text-xs text-slate-500 text-center">أقل مبلغ للسحب هو 100 ل.س</p>
                             </div>
 
                             <div className="grid grid-cols-4 gap-2">

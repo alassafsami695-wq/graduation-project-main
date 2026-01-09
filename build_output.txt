@@ -1,7 +1,0 @@
-
-> frontend@0.1.0 build
-> next build
-
-⚠ `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.ts to protect your application from malicious users.
-⨯ Unable to acquire lock at C:\Users\fayad\Downloads\Electronic_Academy-main\frontend - Copy - Copy\.next\lock, is another instance of next build running?
-  Suggestion: If you intended to restart next build, terminate the other process, and then try again.

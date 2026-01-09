@@ -218,7 +218,16 @@ export default function CourseView({ course }: CourseViewProps) {
                                     <div className="aspect-video relative bg-slate-900 flex items-center justify-center overflow-hidden">
                                         {course.photo ? (
                                             <Image
-                                                src={course.photo}
+                                                src={(() => {
+                                                    if (!course.photo) return "/placeholder-course.png";
+                                                    let p = course.photo;
+                                                    if (p.includes('http') && p.lastIndexOf('http') > 0) p = p.substring(p.lastIndexOf('http'));
+                                                    if (p.startsWith('http')) {
+                                                        if (p.includes('/courses/') && !p.includes('/storage/')) return p.replace('/courses/', '/storage/courses/');
+                                                        return p;
+                                                    }
+                                                    return `http://127.0.0.1:8000/storage/${p.startsWith('/') ? p.slice(1) : p}`;
+                                                })()}
                                                 alt={course.title}
                                                 fill
                                                 className="object-cover opacity-80"
@@ -235,7 +244,7 @@ export default function CourseView({ course }: CourseViewProps) {
                                 <CardContent className="p-6">
                                     <div className="mb-6">
                                         <span className="text-3xl font-bold text-slate-900 block">
-                                            {course.price === 0 ? "مجاني" : `${course.price.toLocaleString()} ريال`}
+                                            {course.price === 0 ? "مجاني" : `${course.price.toLocaleString()} ل.س`}
                                         </span>
                                     </div>
 

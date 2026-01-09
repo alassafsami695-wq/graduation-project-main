@@ -11,6 +11,8 @@ export default async function Page({ searchParams }: SearchPageProps) {
     const response = await searchCourses(query || "");
     const courses: Course[] = response || [];
 
+    console.log("courses", courses);
+
     return (
         <div className="container mx-auto px-4 py-12">
             <div className="mb-12">

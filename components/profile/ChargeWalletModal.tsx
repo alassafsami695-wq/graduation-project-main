@@ -23,7 +23,7 @@ export default function ChargeWalletModal({ isOpen, onClose }: ChargeWalletModal
         e.preventDefault();
         // Updated validation for minimum amount of 1000
         if (!amount || isNaN(Number(amount)) || Number(amount) < 1000) {
-            toast.error("أقل مبلغ للشحن هو 1000 ريال");
+            toast.error("أقل مبلغ للشحن هو 1000 ل.س");
             return;
         }
 
@@ -96,7 +96,7 @@ export default function ChargeWalletModal({ isOpen, onClose }: ChargeWalletModal
 
                 <form onSubmit={handleSubmit} className="p-8 space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-bold text-foreground-muted">المبلغ المراد شحنه (ريال)</label>
+                        <label className="text-sm font-bold text-foreground-muted">المبلغ المراد شحنه (ل.س)</label>
                         <div className="relative">
                             <input
                                 type="number"
@@ -107,7 +107,7 @@ export default function ChargeWalletModal({ isOpen, onClose }: ChargeWalletModal
                                 autoFocus
                             />
                         </div>
-                        <p className="text-xs text-red-500 font-bold text-center">أقل مبلغ للشحن هو 1000 ريال</p>
+                        <p className="text-xs text-red-500 font-bold text-center">أقل مبلغ للشحن هو 1000 ل.س</p>
                     </div>
 
                     <div className="grid grid-cols-3 gap-3">
@@ -118,7 +118,7 @@ export default function ChargeWalletModal({ isOpen, onClose }: ChargeWalletModal
                                 onClick={() => setAmount(val.toString())}
                                 className="py-2 bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary font-bold rounded-xl transition-colors text-sm"
                             >
-                                {val} ريال
+                                {val} ل.س
                             </button>
                         ))}
                     </div>

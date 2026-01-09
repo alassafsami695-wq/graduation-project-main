@@ -363,7 +363,7 @@ const ProfileClient: React.FC<ProfileClientProps> = ({ initialData }) => {
                                 <div className="p-10 rounded-[2.5rem] bg-gradient-to-br from-indigo-600 to-primary text-white shadow-2xl relative overflow-hidden">
                                     <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl" />
                                     <p className="text-lg opacity-80 font-bold mb-2">الرصيد المتاح</p>
-                                    <h3 className="text-6xl font-black mb-10">{profile.wallet.balance} <span className="text-2xl opacity-60">ريال</span></h3>
+                                    <h3 className="text-6xl font-black mb-10">{profile.wallet.balance} <span className="text-2xl opacity-60">ل.س</span></h3>
                                     <h3 className="text-2xl font-black mb-10">{profile.wallet.account_number} <span className="text-2xl opacity-60"></span></h3>
 
                                     <div className="flex flex-wrap items-center gap-4">

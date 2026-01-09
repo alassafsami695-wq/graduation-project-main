@@ -7,8 +7,24 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getFullUrl(path: string | null | undefined): string {
   if (!path) return "";
-  if (path.startsWith("http") || path.startsWith("https")) return path;
-  return `${process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api', '') || "http://127.0.0.1:8000"}/storage/${path}`;
+
+  // Fix double URL issue (backend prepending storage to absolute URLs)
+  // Example: http://127.0.0.1:8000/storage/http://localhost:8000/courses/img.png
+  const lastHttpInfo = path.lastIndexOf("http");
+  if (lastHttpInfo > 0) {
+    return path.substring(lastHttpInfo);
+  }
+
+  // If it's already an absolute URL, trust it as is
+  if (path.startsWith("http") || path.startsWith("https")) {
+    return path;
+  }
+
+  // Ensure and clean relative path
+  const cleanPath = path.startsWith("/") ? path.substring(1) : path;
+
+  // Only prepend storage if it's a relative path
+  return `http://127.0.0.1:8000/storage/${cleanPath}`;
 }
 
 export function getValidVideoUrl(url: string | null | undefined): string {

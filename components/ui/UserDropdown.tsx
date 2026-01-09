@@ -90,7 +90,7 @@ export default function UserDropdown() {
                             {user.wallet && (
                                 <div className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-lg w-fit">
                                     <Wallet className="w-3 h-3" />
-                                    <span>{user.wallet.balance} ريال</span>
+                                    <span>{user.wallet.balance} ل.س</span>
                                 </div>
                             )}
                         </div>
